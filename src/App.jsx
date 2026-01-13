@@ -79,9 +79,36 @@ export default function App() {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
+  // 🔹 기존 onSubmit을 지우고 이 코드로 채워넣으세요
   const onSubmit = (data) => {
-    console.log('✨ Form Submitted:', data);
-    alert('견적 요청이 접수되었습니다! (콘솔 확인)');
+    // 👇 여기에 복사해둔 'https://script.google.com/macros/s/AKfycbwUyDtTtMdMOGzIz0N3aQ99sLtqMaye9WnCACBmDlGuqlxEJk0WTKM7GK287DWxSToj/exec' 주소를 붙여넣으세요!
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUyDtTtMdMOGzIz0N3aQ99sLtqMaye9WnCACBmDlGuqlxEJk0WTKM7GK287DWxSToj/exec";
+
+    // 사용자에게 제출 확인 받기
+    if (!confirm("견적 요청서를 제출하시겠습니까?")) return;
+
+    // 데이터 전송 시작
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors", // 구글 시트 전송 필수 설정
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    .then(() => {
+      // 전송 성공 시
+      alert("성공적으로 접수되었습니다! 담당자가 24시간 내로 연락드리겠습니다.");
+      console.log("전송된 데이터:", data);
+      
+      // (선택사항) 제출 후 페이지 새로고침
+      window.location.reload(); 
+    })
+    .catch((error) => {
+      // 전송 실패 시
+      console.error("Error:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    });
   };
 
   const variants = {
